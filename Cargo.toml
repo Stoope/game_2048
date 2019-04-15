@@ -5,3 +5,4 @@ authors = ["Stepan Kurennykh <stoope@outlook.com>"]
 edition = "2018"
 
 [dependencies]
+crossterm = "0.9.1"
