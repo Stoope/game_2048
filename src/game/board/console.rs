@@ -22,7 +22,7 @@ pub fn print_board(board: &Vec<i32>) -> io::Result<()> {
         for element in &board[start_index..start_index + board_side_size as usize] {
             terminal.write(format!("{: >5}", element))?;
         }
-        terminal.write("\n")?;
+        terminal.write("\r\n")?;
     }
 
     Ok(())
