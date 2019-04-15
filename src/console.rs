@@ -19,11 +19,11 @@ pub fn print_board(board: &Vec<i32>) {
 
     for row in 0..board_side_size {
         let start_index = (row * board_side_size) as usize;
-        terminal
-            .write(format!(
-                "{:?}\n",
-                &board[start_index..start_index + board_side_size as usize]
-            ))
-            .expect("Can't write to the terminal!");
+        for element in &board[start_index..start_index + board_side_size as usize] {
+            terminal
+                .write(format!("{: >5}", element))
+                .expect("Can't write to the terminal!");
+        }
+        terminal.write("\n").expect("Can't write to the terminal!");
     }
 }
