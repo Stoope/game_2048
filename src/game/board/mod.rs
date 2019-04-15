@@ -7,7 +7,7 @@ pub struct Board {
 
 impl Board {
     pub fn new(board_size: i16) -> Board {
-        let board: Vec<i32> = vec![0; board_size as usize];
+        let board: Vec<i32> = vec![0; board_size.pow(2) as usize];
 
         Board { board }
     }
