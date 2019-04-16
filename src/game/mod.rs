@@ -17,19 +17,24 @@ fn check_quit(key_event: &InputEvent) -> bool {
 pub fn start_game(board_size: i16) {
     if let Ok(_raw) = RawScreen::into_raw_mode() {
         let input = input();
-        let board = board::board(board_size);
+        match board::board(board_size) {
+            Ok(board) => {
+                let mut sync_stdin = input.read_sync();
 
-        let mut sync_stdin = input.read_sync();
+                loop {
+                    let event = sync_stdin.next();
 
-        loop {
-            let event = sync_stdin.next();
-
-            if let Some(key_event) = event {
-                if check_quit(&key_event) {
-                    break;
-                } else {
-                    board.perform_action(&key_event);
+                    if let Some(key_event) = event {
+                        if check_quit(&key_event) {
+                            break;
+                        } else {
+                            board.perform_action(&key_event);
+                        }
+                    }
                 }
+            }
+            Err(e) => {
+                panic!(e);
             }
         }
     }
