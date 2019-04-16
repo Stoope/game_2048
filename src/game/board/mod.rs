@@ -1,4 +1,5 @@
 use crossterm::{InputEvent, KeyEvent};
+use rand::Rng;
 use std::io::{Error, ErrorKind};
 mod console;
 
@@ -10,7 +11,11 @@ impl Board {
     pub fn new(board_size: i16) -> Result<Board, Error> {
         match board_size > 1 {
             true => {
-                let board: Vec<i32> = vec![0; board_size.pow(2) as usize];
+                let mut board: Vec<i32> = vec![0; board_size.pow(2) as usize];
+
+                let mut rng = rand::thread_rng();
+                board[rng.gen_range(0, board_size as usize / 2)] = 2;
+                board[rng.gen_range(board_size as usize / 2, board_size as usize)] = 2;
 
                 Ok(Board { board })
             }
