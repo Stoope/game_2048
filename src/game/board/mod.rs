@@ -39,6 +39,9 @@ impl Board {
                     'w' => {
                         self.move_up();
                     }
+                    's' => {
+                        self.move_down();
+                    }
                     _ => {}
                 },
                 _ => {}
@@ -76,6 +79,14 @@ impl Board {
         self.board = rotate_board_left_90_deg(&self.board);
         self.board = rotate_board_left_90_deg(&self.board);
         self.move_right();
+        self.board = rotate_board_left_90_deg(&self.board);
+    }
+
+    fn move_down(&mut self) {
+        self.board = rotate_board_left_90_deg(&self.board);
+        self.move_right();
+        self.board = rotate_board_left_90_deg(&self.board);
+        self.board = rotate_board_left_90_deg(&self.board);
         self.board = rotate_board_left_90_deg(&self.board);
     }
 }
@@ -351,6 +362,48 @@ mod board_tests {
                 board.board = vec![2, 2, 2, 2, 0, 2, 0, 2, 0];
                 board.move_up();
                 assert_eq!(board.board, vec![4, 4, 4, 0, 0, 0, 0, 0, 0]);
+            }
+            Err(e) => {
+                panic!(e);
+            }
+        }
+    }
+
+    #[test]
+    fn should_move_down_case_1() {
+        match board(2) {
+            Ok(mut board) => {
+                board.board = vec![2, 4, 0, 8];
+                board.move_down();
+                assert_eq!(board.board, vec![0, 4, 2, 8]);
+            }
+            Err(e) => {
+                panic!(e);
+            }
+        }
+    }
+
+    #[test]
+    fn should_move_down_case_2() {
+        match board(2) {
+            Ok(mut board) => {
+                board.board = vec![4, 4, 4, 0];
+                board.move_down();
+                assert_eq!(board.board, vec![0, 0, 8, 4]);
+            }
+            Err(e) => {
+                panic!(e);
+            }
+        }
+    }
+
+    #[test]
+    fn should_move_down_case_3() {
+        match board(2) {
+            Ok(mut board) => {
+                board.board = vec![2, 2, 2, 2, 0, 2, 0, 2, 0];
+                board.move_down();
+                assert_eq!(board.board, vec![0, 0, 0, 0, 0, 0, 4, 4, 4]);
             }
             Err(e) => {
                 panic!(e);
