@@ -18,7 +18,7 @@ pub fn start_game(board_size: i16) {
     if let Ok(_raw) = RawScreen::into_raw_mode() {
         let input = input();
         match board::board(board_size) {
-            Ok(board) => {
+            Ok(mut board) => {
                 let mut sync_stdin = input.read_sync();
 
                 loop {
