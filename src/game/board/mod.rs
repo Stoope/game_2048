@@ -33,6 +33,9 @@ impl Board {
                     'd' => {
                         self.move_right();
                     }
+                    'a' => {
+                        self.move_left();
+                    }
                     _ => {}
                 },
                 _ => {}
@@ -47,7 +50,6 @@ impl Board {
     }
 
     fn move_right(&mut self) {
-        // [4, 4, 4, 0] => [0, 8, 0, 4]
         let mut new_board = vec![];
         let board_size = self.get_board_size();
         for row in 0..board_size {
@@ -56,6 +58,14 @@ impl Board {
             new_board.append(&mut fold_to_end(new_row));
         }
         self.board = new_board;
+    }
+
+    fn move_left(&mut self) {
+        self.board = rotate_board_left_90_deg(&self.board);
+        self.board = rotate_board_left_90_deg(&self.board);
+        self.move_right();
+        self.board = rotate_board_left_90_deg(&self.board);
+        self.board = rotate_board_left_90_deg(&self.board);
     }
 }
 
@@ -246,6 +256,48 @@ mod board_tests {
                 board.board = vec![2, 2, 2, 2, 0, 2, 0, 2, 0];
                 board.move_right();
                 assert_eq!(board.board, vec![0, 2, 4, 0, 0, 4, 0, 0, 2]);
+            }
+            Err(e) => {
+                panic!(e);
+            }
+        }
+    }
+
+    #[test]
+    fn should_move_left_case_1() {
+        match board(2) {
+            Ok(mut board) => {
+                board.board = vec![2, 4, 0, 8];
+                board.move_left();
+                assert_eq!(board.board, vec![2, 4, 8, 0]);
+            }
+            Err(e) => {
+                panic!(e);
+            }
+        }
+    }
+
+    #[test]
+    fn should_move_left_case_2() {
+        match board(2) {
+            Ok(mut board) => {
+                board.board = vec![4, 4, 4, 0];
+                board.move_left();
+                assert_eq!(board.board, vec![8, 0, 4, 0]);
+            }
+            Err(e) => {
+                panic!(e);
+            }
+        }
+    }
+
+    #[test]
+    fn should_move_left_case_3() {
+        match board(2) {
+            Ok(mut board) => {
+                board.board = vec![2, 2, 2, 2, 0, 2, 0, 2, 0];
+                board.move_left();
+                assert_eq!(board.board, vec![4, 2, 0, 4, 0, 0, 2, 0, 0]);
             }
             Err(e) => {
                 panic!(e);
