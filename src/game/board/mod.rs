@@ -75,6 +75,18 @@ fn move_zeros_to_start(board_row: &Vec<i32>) -> Vec<i32> {
         .collect()
 }
 
+fn rotate_board_left_90_deg(board: &Vec<i32>) -> Vec<i32> {
+    let board_size = (board.len() as f64).sqrt() as usize;
+    let mut new_board: Vec<i32> = vec![];
+    for column in (0..board_size).rev() {
+        for row in 0..board_size {
+            let index = ((row * board_size) + column) as usize;
+            new_board.push(board[index]);
+        }
+    }
+    new_board
+}
+
 fn fold_to_end(board_row: &Vec<i32>) -> Vec<i32> {
     let mut new_board_row = board_row.clone();
     new_board_row = move_zeros_to_start(&mut new_board_row);
@@ -98,6 +110,22 @@ pub fn board(board_size: i16) -> Result<Board, Error> {
 #[cfg(test)]
 mod board_tests {
     use super::*;
+
+    #[test]
+    fn should_rotate_board_left_90_deg_case_1() {
+        assert_eq!(
+            rotate_board_left_90_deg(&vec![1, 2, 3, 4, 5, 6, 7, 8, 9]),
+            vec![3, 6, 9, 2, 5, 8, 1, 4, 7]
+        );
+    }
+
+    #[test]
+    fn should_rotate_board_left_90_deg_case_2() {
+        assert_eq!(
+            rotate_board_left_90_deg(&vec![1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]),
+            vec![4, 8, 12, 16, 3, 7, 11, 15, 2, 6, 10, 14, 1, 5, 9, 13]
+        );
+    }
 
     #[test]
     fn should_move_zeros_to_start_case_1() {
