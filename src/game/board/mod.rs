@@ -32,15 +32,19 @@ impl Board {
                 KeyEvent::Char(c) => match c {
                     'd' => {
                         self.move_right();
+                        self.add_random_2();
                     }
                     'a' => {
                         self.move_left();
+                        self.add_random_2();
                     }
                     'w' => {
                         self.move_up();
+                        self.add_random_2();
                     }
                     's' => {
                         self.move_down();
+                        self.add_random_2();
                     }
                     _ => {}
                 },
@@ -49,6 +53,23 @@ impl Board {
             _ => {}
         }
         console::print_board(&self.board).expect("Error while processing board!");
+    }
+
+    fn add_random_2(&mut self) {
+        let zeros: Vec<(usize, &i32)> = self
+            .board
+            .iter()
+            .enumerate()
+            .filter(|(_, &item)| item == 0)
+            .collect();
+        let mut rng = rand::thread_rng();
+        match zeros.len() > 0 {
+            true => {
+                let index = zeros[rng.gen_range(0, zeros.len())].0;
+                self.board[index] = 2;
+            }
+            false => {}
+        }
     }
 
     fn get_board_size(&self) -> usize {
@@ -273,7 +294,7 @@ mod board_tests {
 
     #[test]
     fn should_move_right_case_3() {
-        match board(2) {
+        match board(3) {
             Ok(mut board) => {
                 board.board = vec![2, 2, 2, 2, 0, 2, 0, 2, 0];
                 board.move_right();
@@ -315,7 +336,7 @@ mod board_tests {
 
     #[test]
     fn should_move_left_case_3() {
-        match board(2) {
+        match board(3) {
             Ok(mut board) => {
                 board.board = vec![2, 2, 2, 2, 0, 2, 0, 2, 0];
                 board.move_left();
@@ -357,7 +378,7 @@ mod board_tests {
 
     #[test]
     fn should_move_up_case_3() {
-        match board(2) {
+        match board(3) {
             Ok(mut board) => {
                 board.board = vec![2, 2, 2, 2, 0, 2, 0, 2, 0];
                 board.move_up();
@@ -399,11 +420,53 @@ mod board_tests {
 
     #[test]
     fn should_move_down_case_3() {
-        match board(2) {
+        match board(3) {
             Ok(mut board) => {
                 board.board = vec![2, 2, 2, 2, 0, 2, 0, 2, 0];
                 board.move_down();
                 assert_eq!(board.board, vec![0, 0, 0, 0, 0, 0, 4, 4, 4]);
+            }
+            Err(e) => {
+                panic!(e);
+            }
+        }
+    }
+
+    #[test]
+    fn should_add_random_2_case_1() {
+        match board(2) {
+            Ok(mut board) => {
+                board.board = vec![32, 4, 8, 16];
+                board.add_random_2();
+                assert_eq!(board.board.iter().filter(|&item| *item == 2).count(), 0);
+            }
+            Err(e) => {
+                panic!(e);
+            }
+        }
+    }
+
+    #[test]
+    fn should_add_random_2_case_2() {
+        match board(2) {
+            Ok(mut board) => {
+                board.board = vec![0, 0, 0, 0];
+                board.add_random_2();
+                assert_eq!(board.board.iter().filter(|&item| *item == 2).count(), 1);
+            }
+            Err(e) => {
+                panic!(e);
+            }
+        }
+    }
+
+    #[test]
+    fn should_add_random_2_case_3() {
+        match board(2) {
+            Ok(mut board) => {
+                board.board = vec![0, 8, 4, 16];
+                board.add_random_2();
+                assert_eq!(board.board.iter().filter(|&item| *item == 2).count(), 1);
             }
             Err(e) => {
                 panic!(e);
